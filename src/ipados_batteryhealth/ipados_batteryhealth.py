@@ -56,13 +56,18 @@ class Item:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser("parse iPad Analytics and print battery health")
+    parser = argparse.ArgumentParser(
+        None,
+        description="parse iPad Analytics and print battery health",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
         "analytics_filepaths",
         type=(lambda p: pathlib.Path(p).resolve(strict=True)),
         nargs="+",
         help="iPad Analytics input file(s)",
     )
+
     args = parser.parse_args()
 
     for file in args.analytics_filepaths:

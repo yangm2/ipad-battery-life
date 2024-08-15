@@ -2,8 +2,10 @@ from typing import Any, Dict
 from ..ipados_batteryhealth import ipados_batteryhealth as sut
 import pytest
 
+
 def test_example() -> None:
     assert True
+
 
 def test_div0() -> None:
     tmp: Dict[str, Any] = {
@@ -13,6 +15,6 @@ def test_div0() -> None:
     }
 
     cvh = sut.BatteryConfigValueHistogramFinal_V1(tmp)
-    
+
     with pytest.raises(ZeroDivisionError):
         assert cvh.calc() != 0
