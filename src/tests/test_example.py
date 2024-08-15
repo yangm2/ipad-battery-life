@@ -1,6 +1,6 @@
 from typing import Any, Dict
 from ..ipados_batteryhealth import ipados_batteryhealth as sut
-import pytest # type: ignore[import-not-found]
+import pytest
 
 def test_example() -> None:
     assert True
