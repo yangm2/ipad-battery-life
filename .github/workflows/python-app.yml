@@ -40,4 +40,4 @@ jobs:
         mypy --verbose --python-version 3.12 --strict --pretty src
     - name: Test with pytest
       run: |
-        pytest --cov=src/ipados_batteryhealth --cov-fail-under=40
+        pytest --cov=src/ipados_batteryhealth --cov-fail-under=50

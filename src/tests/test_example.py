@@ -12,7 +12,7 @@ def test_div0() -> None:
         "last_value_NominalChargeCapacity": 0,
     }
 
-    cvh = sut.BatteryConfigValueHistogramFinal_V1(**tmp)
+    cvh = sut.BatteryConfigValueHistogramFinal_V1(tmp)
     
     with pytest.raises(ZeroDivisionError):
         assert cvh.calc() != 0
