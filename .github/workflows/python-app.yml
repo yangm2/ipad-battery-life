@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pipx
         pipx install uv
-        uv pip install mypy ruff flake8 pytest
+        uv pip install --system mypy ruff flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
       run: |
