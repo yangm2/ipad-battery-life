@@ -1,8 +1,8 @@
 from typing import Any, Dict
 from ..ipados_batteryhealth import ipados_batteryhealth as sut
-import pytest
+import pytest # type: ignore
 
-def test_example():
+def test_example() -> None:
     assert True
 
 def test_div0() -> None:

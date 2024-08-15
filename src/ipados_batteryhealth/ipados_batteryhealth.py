@@ -14,7 +14,7 @@ class BatteryConfigValueHistogramFinal_V1:
     last_value_MaximumFCC: int  # mAh capacity when new
     last_value_NominalChargeCapacity: int  # mAh capcity when data acquired
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs: Dict[str, Any]) -> None:
         if "last_value_MaximumCapacityPercent" in kwargs.keys():
             self.last_value_MaximumCapacityPercent = kwargs[
                 "last_value_MaximumCapacityPercent"
@@ -39,20 +39,23 @@ class BatteryConfigValueHistogramFinal_V1:
 @dataclass(frozen=False)
 class Item:
     name: Optional[str] = None
-    message: Optional[Dict[str, Any]] = None
+    message: Optional[BatteryConfigValueHistogramFinal_V1] = None
 
     # pattern for constructing dataclass with subset of data from sloppy invocation
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs: Dict[str, Any]) -> None:
         battery_config_re = re.compile(r"BatteryConfigValueHistogramFinal_V\d+")
 
         if "name" in kwargs.keys():
             self.name = kwargs["name"]
 
+            if self.name is None:
+                raise ValueError
+
             if battery_config_re.match(self.name):
                 self.message = BatteryConfigValueHistogramFinal_V1(**kwargs["message"])
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser("parse iPad Analytics and print battery health")
     parser.add_argument(
         "analytics_filepaths",
