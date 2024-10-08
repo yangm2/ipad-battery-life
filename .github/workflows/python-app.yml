@@ -19,25 +19,29 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.12
+    - name: Set up Python 3.13
       uses: actions/setup-python@v5
       with:
-        python-version: "3.12"
+        python-version: "3.13"
+    - name: Define a cache dependency glob
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+        cache-dependency-glob: "requirements**.txt"
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install pipx
-        pipx install uv
-        # install dependencies with uv to system (don't need venv in ephemeral job)
-        uv pip install --system mypy ruff pytest pytest-cov
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        # install CI and script dependencies with uv to system (don't need venv in ephemeral job)
+        uv pip install mypy ruff pytest pytest-cov
+        if [ -f requirements.txt ]; then uv pip install -r requirements.txt; fi
+      env:
+        UV_SYSTEM_PYTHON: 1
     - name: Lint
       run: |
         # Lint with ruff
-        ruff check --verbose --statistics --output-format github --target-version py312
+        ruff check --verbose --statistics --output-format github --target-version py313
     - name: Type Check with mypy
       run: |
-        mypy --verbose --python-version 3.12 --strict --pretty src
+        mypy --verbose --python-version 3.13 --strict --pretty src
     - name: Test with pytest
       run: |
         pytest --cov=src/ipados_batteryhealth --cov-fail-under=50
