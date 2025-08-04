@@ -10,6 +10,8 @@ import re
 
 @dataclass(frozen=False)
 class BatteryConfigValueHistogramFinal_V1:
+    """ partial representation from iPad Analytics of BatteryConfigValueHistogramFinal_V1
+    """
     last_value_MaximumCapacityPercent: float
     last_value_MaximumFCC: int  # mAh capacity when new
     last_value_NominalChargeCapacity: int  # mAh capcity when data acquired
@@ -52,7 +54,7 @@ class Item:
                 raise ValueError
 
             if battery_config_re.match(self.name):
-                self.message = BatteryConfigValueHistogramFinal_V1(**kwargs["message"])
+                self.message = BatteryConfigValueHistogramFinal_V1(kwargs=kwargs["message"])
 
 
 def main() -> None:
@@ -75,8 +77,8 @@ def main() -> None:
 
         with pathlib.Path(file).open(mode="r") as log:
             for line in log:
-                j = json.loads(line)
-                i = Item(**j)
+                j: Dict[str, Any] = json.loads(line)
+                i = Item(kwargs=j)
 
                 if i.message is not None:
                     pprint.pp(i.message)

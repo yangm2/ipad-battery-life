@@ -24,24 +24,31 @@ jobs:
       with:
         python-version: "3.13"
     - name: Define a cache dependency glob
-      uses: astral-sh/setup-uv@v3
+      uses: astral-sh/setup-uv@v6
       with:
         enable-cache: true
         cache-dependency-glob: "requirements**.txt"
     - name: Install dependencies
       run: |
         # install CI and script dependencies with uv to system (don't need venv in ephemeral job)
-        uv pip install mypy ruff pytest pytest-cov
-        if [ -f requirements.txt ]; then uv pip install -r requirements.txt; fi
+        uv sync
       env:
         UV_SYSTEM_PYTHON: 1
+    - name: Format check with Ruff
+      run: |
+        # Format check with ruff
+        uv run ruff format --check --target-version py313
     - name: Lint
       run: |
         # Lint with ruff
-        ruff check --verbose --statistics --output-format github --target-version py313
+        uv run ruff check --verbose --statistics --output-format github --target-version py313
+    - name: Type Check with Ty
+      run: |
+        # Type check with ty
+        uv run ty check --verbose --target-version 3.13 src
     - name: Type Check with mypy
       run: |
-        mypy --verbose --python-version 3.13 --strict --pretty src
+        uv run mypy --verbose --python-version 3.13 --strict --pretty src
     - name: Test with pytest
       run: |
-        pytest --cov=src/ipados_batteryhealth --cov-fail-under=50
+        uv run pytest --cov=src/ipados_batteryhealth --cov-fail-under=50
